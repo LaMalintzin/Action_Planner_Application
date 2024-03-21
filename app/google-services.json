@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "84003615080",
+    "project_id": "action-planner-applicati-b4e0a",
+    "storage_bucket": "action-planner-applicati-b4e0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84003615080:android:e8b379034b97941a2526dd",
+        "android_client_info": {
+          "package_name": "com.example.actionplannerapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXZJjkmqyv3xaAMkfjUZR-BPECnFXfUV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
