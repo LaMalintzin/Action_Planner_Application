@@ -13,10 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private MyAdapter adapter;
     private FloatingActionButton mFaButton;
+
+    private List<String> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,19 @@ public class MainActivity extends AppCompatActivity {
         mFaButton = findViewById(R.id.floatingActionButton);
 
         recyclerView.setHasFixedSize(true);
+        // I might just need on off the following
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize your dataList here
+        dataList = new ArrayList<>();
+        // Add some sample data to the list
+        dataList.add("Task 1");
+        dataList.add("Task 2");
+        dataList.add("Task 3");
+
+        adapter = new MyAdapter(dataList);
+        recyclerView.setAdapter(adapter);
 
         mFaButton.setOnClickListener(new View.OnClickListener() {
             @Override
