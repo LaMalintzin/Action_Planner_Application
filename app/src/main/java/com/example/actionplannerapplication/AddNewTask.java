@@ -1,5 +1,6 @@
 package com.example.actionplannerapplication;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -149,5 +150,9 @@ public class AddNewTask extends BottomSheetDialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
+        Activity activity = getActivity();
+        if (activity instanceof OnDialogCloseListner){
+            ((OnDialogCloseListner)activity).onDialogClose(dialog);
+        }
     }
 }
