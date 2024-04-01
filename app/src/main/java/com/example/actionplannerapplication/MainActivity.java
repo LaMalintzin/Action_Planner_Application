@@ -1,5 +1,6 @@
 package com.example.actionplannerapplication;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,13 +20,15 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnDialogCloseListner {
 
     private RecyclerView recyclerView;
     //private MyAdapter adapter;
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private ActionAdapter adapter;
     //private List<String> dataList;
     private List<ActionModel> dataList;
+    // Fixing the problem with multiple task appearing on the screen when adding a new task.
+    private Query query;
+    private ListenerRegistration listenerRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
      * the firestore database through an activity listener.
      */
     private void showData(){
-        firestore.collection("task").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        // To get the data in the correct order from firestore add .orderBy and Query.Direction.
+        query = firestore.collection("task").orderBy("time", Query.Direction.DESCENDING);
+        listenerRegistration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 for (DocumentChange documentChange : value.getDocumentChanges()){
@@ -94,8 +102,16 @@ public class MainActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 }
-                Collections.reverse(dataList);
+                // Detach the listenerRegistration
+                listenerRegistration.remove();
             }
         });
+    }
+
+    @Override
+    public void onDialogClose(DialogInterface dialogInterface) {
+        dataList.clear();
+        showData();
+        adapter.notifyDataSetChanged();
     }
 }
