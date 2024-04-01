@@ -1,5 +1,7 @@
 package com.example.actionplannerapplication.Adapter;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.actionplannerapplication.AddNewTask;
 import com.example.actionplannerapplication.MainActivity;
 import com.example.actionplannerapplication.Model.ActionModel;
 import com.example.actionplannerapplication.R;
@@ -40,6 +43,34 @@ public class ActionAdapter extends RecyclerView.Adapter<ActionAdapter.ActionView
         firestore = FirebaseFirestore.getInstance();
 
         return new ActionViewHolder(view);
+    }
+
+    public void deleteTask(int position){
+        ActionModel actionModel = todoList.get(position);
+        firestore.collection("task").document(actionModel.TaskId).delete();
+        todoList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public Context getContext(){
+        return activity;
+    }
+
+    public void editTask(int position){
+        ActionModel actionModel = todoList.get(position);
+        // When we edit a task we have to set the existing data to the edit text by passing it
+        // from the adapter class to the addNewTask class.
+        Bundle bundle = new Bundle();
+        bundle.putString("task", actionModel.getTask());
+        bundle.putString("due", actionModel.getDue());
+        bundle.putString("id", actionModel.TaskId);
+
+        //Create an instance of addNewTask
+        AddNewTask addNewTask = new AddNewTask();
+        addNewTask.setArguments(bundle);
+        //
+        addNewTask.show(activity.getSupportFragmentManager(), addNewTask.getTag());
+
     }
 
     @Override

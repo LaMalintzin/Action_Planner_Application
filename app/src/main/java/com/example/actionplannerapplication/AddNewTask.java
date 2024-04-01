@@ -42,6 +42,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
     private FirebaseFirestore firestore;
     private Context context;
     private String dueDate = " ";
+    private String id = "";
+    private String dueDateUpdate = "";
     public static AddNewTask newInstance(){
         return new AddNewTask();
     }
@@ -60,6 +62,18 @@ public class AddNewTask extends BottomSheetDialogFragment {
         mSaveBtn = view.findViewById(R.id.save_btn);
 
         firestore = FirebaseFirestore.getInstance();
+
+        boolean isUpdate = false;
+        final Bundle bundle = getArguments();
+        if (bundle != null){
+            isUpdate = true;
+            String task = bundle.getString("task");
+            id = bundle.getString("id");
+            dueDateUpdate = bundle.getString("due");
+
+            mTaskEdit.setText(task);
+            setDueDate.setText(dueDate);
+        }
 
         mTaskEdit.addTextChangedListener(new TextWatcher() {
             @Override
